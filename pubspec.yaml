@@ -27,12 +27,15 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  flutter_slidable: ^0.6.0
-  provider: ^5.0.0
+  flutter_slidable: ^0.5.7
+  provider: ^4.3.2+2
+
   flutter:
     sdk: flutter
 
-
+  # firebase integrations
+  firebase_core: ^0.5.2+1
+  cloud_firestore: ^0.14.3+1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
+import 'package:provider/provider.dart';
+import 'firebase_api.dart';
+import 'todo.dart';
+import 'todos.dart';
 import 'add_to_do_dialog.dart';
+import 'completed_list_widget.dart';
 import 'todo_list_widget.dart';
+
+import '../main.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,12 +21,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final tabs = [
       TodoListWidget(),
-      Container(),
+      CompletedListWidget(),
     ];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('To Do App'),
+        title: Text('TO DO APP'),
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -41,16 +47,45 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: tabs[selectedIndex],
-      floatingActionButton: FloatingActionButton(
+      body: StreamBuilder<List<Todo>>(
+        stream: FirebaseApi.readTodos(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return Center(child: CircularProgressIndicator());
+            default:
+              if (snapshot.hasError) {
+                return buildText('Something Went Wrong Try later');
+              } else {
+                final todos = snapshot.data;
 
+                final provider = Provider.of<TodosProvider>(context);
+                provider.setTodos(todos!);
+
+                return tabs[selectedIndex];
+              }
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        backgroundColor: Colors.black,
         onPressed: () => showDialog(
           context: context,
           builder: (context) => AddTodoDialogWidget(),
-
+          barrierDismissible: false,
         ),
         child: Icon(Icons.add),
       ),
     );
   }
 }
+
+Widget buildText(String text) => Center(
+  child: Text(
+    text,
+    style: TextStyle(fontSize: 24, color: Colors.white),
+  ),
+);

@@ -8,10 +8,10 @@ class TodoFormWidget extends StatelessWidget {
   final VoidCallback onSavedTodo;
 
   const TodoFormWidget({
-    Key ?key,
+    Key? key,
     this.title = '',
     this.description = '',
-    required  this.onChangedTitle,
+    required this.onChangedTitle,
     required this.onChangedDescription,
     required this.onSavedTodo,
   }) : super(key: key);
@@ -24,7 +24,7 @@ class TodoFormWidget extends StatelessWidget {
         buildTitle(),
         SizedBox(height: 8),
         buildDescription(),
-        SizedBox(height: 32),
+        SizedBox(height: 16),
         buildButton(),
       ],
     ),
